@@ -1,7 +1,7 @@
 # FilmorateDbArchitecture
 
-![alt text](https://github.com/Tulpanchik2906/FilmorateDbArchitecture/blob/main/QuickDBD-export-filmorate.png)
 
+![alt text](./filmorate-diagramm.png)
 ## Основные запросы к БД
 - Получить список всех фильмов
 ``` sql
@@ -43,4 +43,28 @@ FROM LIKES
 JOIN FILMS
 ON FILMS.ID = LIKES.FILM_ID
 WHERE FILMS.ID = <film_id>
+```
+
+- Получить список id пользователей, которые лайкнули пост
+``` sql
+SELECT LIKES.USER_ID
+FROM LIKES
+JOIN FILMS
+ON FILMS.ID = LIKES.FILM_ID
+WHERE FILMS.ID = <film_id>
+```
+
+- Получить список друзей пользователя
+``` sql
+-- Ищем друзей, где пользователь инициатор
+SELECT USERS.* FROM FRIENDSHIP
+JOIN USERS ON
+USERS.ID = FRIENDSHIP.ACCEPTOR_ID
+WHERE FRIENDSHIP.INITIATOR_ID = <user_id>
+-- Ищем друзей, где пользователь согласился на дружбу
+UNION
+SELECT USERS.* FROM FRIENDSHIP
+JOIN USERS ON
+USERS.ID = FRIENDSHIP.INITIATOR_ID
+WHERE FRIENDSHIP.ACCEPTOR_ID = <user_id> AND FRIENDSHIP.STATUS = TRUE 
 ```
